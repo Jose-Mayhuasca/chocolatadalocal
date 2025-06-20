@@ -3,7 +3,12 @@
         <div class="bg-white rounded-lg shadow p-6">
             <!-- Toolbar Superior -->
             <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-800">Propuestas Activas</h1>
+                <h1 class="text-2xl font-bold text-gray-800">
+                    Propuestas Activas
+                    <span class="ml-2 text-sm font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
+                        {{ totalPropuestas }}
+                    </span>
+                </h1>
             </div>
 
             <!-- Contenedor de tarjetas -->
@@ -50,6 +55,8 @@ const Initialize = () => {
     LoadPropuestas();
 };
 
+const totalPropuestas = ref(0); // contador de propuestas activas
+
 const LoadPropuestas = async () => {
     console.log("idUserLocalStorage:", idUser);
     if (!idUser) {
@@ -60,7 +67,8 @@ const LoadPropuestas = async () => {
         const response = await ProposalsService.GetProposalsService(idUser);
         console.log("loadPropuestas:", response.data);
         if (response.status === 200) {
-            oListPropuestas.value = response.data;
+            oListPropuestas.value = response.data.filter(p => p.estado === true);
+            totalPropuestas.value = oListPropuestas.value.length;
         }
     } catch (error) {
         console.error("Error al cargar propuestas:", error);

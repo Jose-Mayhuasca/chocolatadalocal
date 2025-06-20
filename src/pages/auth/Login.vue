@@ -73,7 +73,7 @@ async function loginOrganization() {
     if (response.data.password === password.value) {
       console.log('Contraseña correcta, redirigiendo...');
       localStorage.setItem('userId', response.data.login);
-      router.push({ path: `/portal` });
+      router.push({ path: `/portal/Organizacion/Propuestas` });
     } else {
       console.error('Contraseña incorrecta');
       alert('Contraseña incorrecta. Inténtalo de nuevo.');
@@ -90,7 +90,7 @@ async function loginVolunteer() {
     if (response.data.password === password.value) {
       console.log('Contraseña correcta, redirigiendo...');
       localStorage.setItem('userId', response.data.login);
-      router.push({ path: `/portal` });
+      router.push({ path: `/portal/Voluntario/Propuestas` });
     } else {
       console.error('Contraseña incorrecta');
       alert('Contraseña incorrecta. Inténtalo de nuevo.');
