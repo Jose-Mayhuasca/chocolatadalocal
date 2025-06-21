@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div class="flex items-center">
-                            <img src="https://via.placeholder.com/40" alt="Unicef" class="w-10 h-10 rounded-full mr-3">
+                            <img alt="Unicef" class="w-10 h-10 rounded-full mr-3">
                             <div>
                                 <p class="text-white font-semibold">{{ oPropuesta?.razonSocial }}</p>
                                 <p class="text-green-200 text-sm">Organización verificada <i
@@ -112,7 +112,7 @@
                     <div class="bg-white rounded-lg shadow-md p-6">
                         <h2 class="text-xl font-bold text-gray-800 mb-4">Organización</h2>
                         <div class="flex items-center mb-4">
-                            <img src="https://via.placeholder.com/60" alt="Unicef" class="w-16 h-16 rounded-full mr-4">
+                            <img alt="Unicef" class="w-16 h-16 rounded-full mr-4">
                             <div>
                                 <p class="font-semibold">{{ oPropuesta?.razonSocial }}</p>
                                 <p class="text-green-600 text-sm">Verificada <i class="fas fa-check-circle ml-1"></i>
