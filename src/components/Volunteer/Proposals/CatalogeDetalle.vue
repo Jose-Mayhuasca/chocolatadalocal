@@ -80,7 +80,7 @@
                         <p class="text-gray-700 mb-4">{{ oPropuesta?.descripcionRequisito }}</p>
                     </div>
 
-                    <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
                         <h2 class="text-2xl font-bold text-gray-800 mb-4">Beneficios</h2>
                         <ul class="list-disc pl-5 text-gray-700 space-y-2">
                             <li>Certificado de participación</li>
@@ -89,6 +89,11 @@
                             <li>Posibilidad de continuar en otros proyectos</li>
                         </ul>
                     </div>
+                    <button @click="BackTo"
+                        class="flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                        <i class="pi pi-arrow-left mr-2"></i>
+                        Atrás
+                    </button>
                 </div>
 
                 <!-- Columna derecha -->
@@ -194,11 +199,8 @@ async function InscribeVolunteer(idVoluntariado) {
     }
 }
 
-// const porcentajeCompletado = computed(() => {
-//     const inscritos = propuesta.value?.voluntariosInscritos || 0;
-//     const requeridos = propuesta.value?.voluntariosRequeridos || 1;
-//     return Math.min(Math.round((inscritos / requeridos) * 100), 100);
-// });
-
+const BackTo = () => {
+    router.push('/portal/Voluntario/Propuestas');
+}
 
 </script>

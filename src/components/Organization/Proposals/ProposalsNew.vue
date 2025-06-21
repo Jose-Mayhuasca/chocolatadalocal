@@ -75,7 +75,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Campo Descripción Requisitos -->
                     <div class="relative md:col-span-2">
-                        <textarea id="txtDescriptionRequirements" rows="2" v-model="oPropuestas.descripcionRequisito"
+                        <textarea id="txtDescriptionRequirements" rows="4" v-model="oPropuestas.descripcionRequisito"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent peer"></textarea>
                         <label for="txtDescriptionRequirements"
                             class="absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-500 transition-all peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-500">
@@ -143,7 +143,13 @@ const LoadPropuestasDetalle = async (idVoluntariado) => {
     console.log('Response from GetProposalsDetailService:', response);
     if (response.status == 200) {
         console.log('Propuestas loaded successfully:', response.data);
-        oPropuestas.value = response.data[0];
+        const propuesta = response.data[0];
+
+        // Transformar fechas antes de asignarlas
+        propuesta.fechaInicio = new Date(propuesta.fechaInicio).toISOString().slice(0, 10);
+        propuesta.fechaFinal = new Date(propuesta.fechaFinal).toISOString().slice(0, 10);
+
+        oPropuestas.value = propuesta;
     }
 }
 
