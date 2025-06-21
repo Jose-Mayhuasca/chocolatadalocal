@@ -38,7 +38,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-18">
         <div v-for="vol in filteredCatalogo" :key="vol.idVoluntariado" class="overflow-hidden">
           <div class="relative overflow-hidden rounded-lg">
-            <img src="../../../../dist/assets/ban1-cg6rbYsS.jpg" alt="Voluntariado"
+            <img src="/public/imagenes/ban1.jpg" alt="Voluntariado"
               class="w-full h-48 object-cover hover:scale-105 transition duration-300" />
             <div class="absolute top-2 right-2 bg-teal-400/80 text-white text-xs font-semibold px-2 py-1 rounded-md">
               Presencial
