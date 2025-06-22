@@ -35,29 +35,27 @@
           {{ totalPropuestas }}</span>
       </h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-18">
-        <div v-for="vol in filteredCatalogo" :key="vol.idVoluntariado" class="overflow-hidden">
-          <div class="relative overflow-hidden rounded-lg">
-            <img src="/public/imagenes/ban1.jpg" alt="Voluntariado"
-              class="w-full h-48 object-cover hover:scale-105 transition duration-300" />
-            <div class="absolute top-2 right-2 bg-teal-400/80 text-white text-xs font-semibold px-2 py-1 rounded-md">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div v-for="vol in filteredCatalogo" :key="vol.idVoluntariado"
+          class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-2xl flex flex-col">
+          <div class="relative">
+            <img src="/public/imagenes/ban1.jpg" alt="Voluntariado" class="w-full h-48 object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+            <span class="absolute top-3 left-3 bg-teal-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
               Presencial
-            </div>
+            </span>
           </div>
-
-          <div class="pt-2">
-            <div class="flex items-center">
+          <div class="flex-1 flex flex-col p-5">
+            <div class="flex items-center mb-1">
               <span class="font-semibold text-sm text-blue-500">{{ vol.razonSocial }}</span>
             </div>
-
-            <h3 class="text-lg font-semibold text-gray-900 my-1 leading-tight">
+            <h3 class="text-lg font-bold text-gray-900 mb-1 leading-tight line-clamp-1">
               {{ vol.tituloPropuesta }}
             </h3>
-            <p class="text-sm text-gray-500 line-clamp-2">
+            <p class="text-sm text-gray-500 mb-2 line-clamp-2">
               {{ vol.descripcionPropuesta }}
             </p>
-
-            <div class="pt-4 flex flex-wrap items-center gap-y-1 gap-x-3 text-xs text-gray-500">
+            <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 mb-3">
               <span class="flex items-center">
                 <i class="pi pi-calendar mr-1"></i>
                 {{ formatDateRange(vol.fechaInicio, vol.fechaFinal) }}
@@ -67,17 +65,15 @@
                 {{ vol.direccion }}
               </span>
             </div>
-
-            <div class="flex items-center flex-wrap justify-between py-3">
+            <div class="flex items-center justify-between mt-auto pt-2 border-t border-gray-100">
               <RouterLink :to="`/portal/Voluntario/Propuestas/Detalle/${vol.idVoluntariado}`"
-                class="block text-neutral-800 text-sm hover:text-amber-500">
-                <span class="flex items-end justify-end group hover:cursor-pointer">
-                  <span class="group-hover:text-blue-500 hover:underline hover:decoration duration-200">Ver
-                    detalles</span>
-                </span>
+                class="inline-flex items-center gap-1 text-blue-600 hover:text-amber-500 text-sm font-medium transition">
+                <i class="pi pi-eye"></i>
+                Ver detalles
               </RouterLink>
               <button @click="InscribeVolunteer(vol.idVoluntariado)"
-                class="cursor-pointer bg-yellow-400 hover:bg-yellow-500 text-gray-800 text-sm px-6 py-2 rounded-lg transition">
+                class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-500 text-white font-semibold px-5 py-2 rounded-lg shadow transition">
+                <i class="pi pi-user-plus"></i>
                 Inscribirse
               </button>
             </div>

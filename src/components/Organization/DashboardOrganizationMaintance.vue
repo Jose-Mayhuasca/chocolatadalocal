@@ -1,25 +1,37 @@
 <template>
     <div class="w-full py-20 px-6 bg-gradient-to-br from-gray-50 via-blue-50 to-white min-h-screen">
-        <div class="bg-white rounded-lg shadow p-6">
-           <!-- Toolbar Superior -->
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-800">Dashboards</h1>
+        <div class="bg-white rounded-2xl shadow-xl p-10 w-full max-w-6xl mx-auto">
+            <!-- Toolbar Superior -->
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-10 gap-2">
+                <div>
+                    <h1 class="text-3xl font-bold text-blue-900 flex items-center gap-3">
+                        <i class="pi pi-chart-bar text-cyan-500 text-4xl"></i>
+                        Dashboard de Organización
+                    </h1>
+                    <p class="text-gray-500 mt-2 text-base">Visualiza el estado y evolución de tus propuestas.</p>
+                </div>
             </div>
 
             <!-- Contenedor de gráficos -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <!-- Propuestas Activas/Inactivas -->
-                <div class="card bg-white shadow-md p-4 rounded-lg">
-                    <h2 class="text-lg font-semibold text-gray-700 mb-3">Comparación de Propuestas</h2>
-                    <Chart type="bar" :data="chartPropuestasData" :options="chartOptions" />
+                <div class="bg-white shadow-md p-8 rounded-xl border-l-8 border-cyan-400 flex flex-col">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i class="pi pi-briefcase text-cyan-400 text-2xl"></i>
+                        <h2 class="text-lg font-semibold text-gray-700">Comparación de Propuestas</h2>
+                    </div>
+                    <Chart type="bar" :data="chartPropuestasData" :options="chartOptions" style="min-height:260px" />
                 </div>
 
-                <!-- Otro gráfico (ejemplo: Evolución de propuestas) -->
-                <div class="card bg-white shadow-md p-4 rounded-lg">
-                    <h2 class="text-lg font-semibold text-gray-700 mb-3">Evolución de Propuestas</h2>
-                    <Chart type="line" :data="chartEvolucionData" :options="chartOptions" />
+                <!-- Evolución de propuestas -->
+                <div class="bg-white shadow-md p-8 rounded-xl border-l-8 border-violet-500 flex flex-col">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i class="pi pi-chart-line text-violet-500 text-2xl"></i>
+                        <h2 class="text-lg font-semibold text-gray-700">Evolución de Propuestas</h2>
+                    </div>
+                    <Chart type="line" :data="chartEvolucionData" :options="chartOptions" style="min-height:260px" />
                 </div>
-            </div>    
+            </div>
         </div>
     </div>
 </template>
@@ -48,10 +60,10 @@ const LoadPropuestas = async () => {
             console.error("No se encontró idUser en localStorage");
             return;
         }
-        
+
         const response = await ProposalsService.GetProposalsService(idUser);
         console.log("loadPropuestas:", response.data);
-        
+
         if (response.status === 200) {
             oListPropuestas.value = response.data;
         }
@@ -82,7 +94,7 @@ const setChartPropuestasData = () => {
 // Gráfico de evolución de propuestas (ejemplo con fechas)
 const setChartEvolucionData = () => {
     const fechas = oListPropuestas.value.map(propuesta => formatDate(propuesta.fechaInicio));
-    const cantidades = oListPropuestas.value.map((_, index) => index + 1); 
+    const cantidades = oListPropuestas.value.map((_, index) => index + 1);
 
     return {
         labels: fechas,

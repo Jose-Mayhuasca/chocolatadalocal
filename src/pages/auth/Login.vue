@@ -1,24 +1,32 @@
 <template>
-  <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-    <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
-      <h2 class="text-2xl font-bold text-center text-gray-800">Iniciar Sesión</h2>
+  <div
+    class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
+    <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-2xl shadow-2xl border border-blue-100">
+      <div class="flex flex-col items-center gap-2 mb-4">
+        <i class="pi pi-user-lock text-blue-500 text-4xl"></i>
+        <h2 class="text-2xl font-bold text-center text-blue-900">Iniciar Sesión</h2>
+        <p class="text-gray-500 text-sm text-center">Accede a tu cuenta de voluntario u organización</p>
+      </div>
       <form @submit.prevent="handleSubmit" class="space-y-6">
         <div>
-          <label for="user" class="block mb-2 text-sm font-medium text-gray-700">Usuario(DNI/RUC)</label>
+          <label for="user" class="block mb-2 text-sm font-medium text-gray-700">Usuario (DNI/RUC)</label>
           <input type="number" id="user" v-model="user" required
-            class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200" />
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-gray-50 transition" />
         </div>
         <div>
           <label for="password" class="block mb-2 text-sm font-medium text-gray-700">Contraseña</label>
           <input type="password" id="password" v-model="password" required
-            class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200" />
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-gray-50 transition" />
         </div>
-        <button type="submit" class="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700">Iniciar
-          Sesión</button>
+        <button type="submit"
+          class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg font-semibold shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition">
+          <i class="pi pi-sign-in"></i>
+          Iniciar Sesión
+        </button>
       </form>
       <p class="mt-4 text-sm text-center text-gray-600">
         ¿No tienes una cuenta?
-        <router-link to="/register" class="text-blue-600 hover:underline">Crear Cuenta</router-link>
+        <router-link to="/register" class="text-blue-600 hover:underline font-semibold">Crear Cuenta</router-link>
       </p>
     </div>
   </div>

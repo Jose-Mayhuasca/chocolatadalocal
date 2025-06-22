@@ -1,89 +1,96 @@
 <template>
-    <div class="w-full py-20 px-6 bg-gradient-to-br from-gray-50 via-blue-50 to-white min-h-screen">
-        <div class="bg-white rounded-lg shadow p-6">
+    <div
+        class="w-full py-20 px-6 bg-gradient-to-br from-gray-50 via-blue-50 to-white min-h-screen flex justify-center items-start">
+        <div class="bg-white rounded-2xl shadow-xl p-10 w-full max-w-3xl">
             <!-- Toolbar Superior -->
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-800">Datos de Perfil</h1>
+            <div class="flex items-center gap-3 mb-8">
+                <i class="pi pi-building text-blue-400 text-3xl"></i>
+                <h1 class="text-3xl font-bold text-blue-900">Datos de Perfil de la Organización</h1>
             </div>
 
             <form @submit.prevent="saveProfile">
-                <div class="flex flex-col space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="flex flex-col space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- Campo RUC -->
                         <div class="relative">
-                            <input id="txtTitle" v-model="oOrganization.idOrganizacion" :disabled="isReadOnly" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent peer" />
-                            <label for="txtTitle"
-                                class="absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-500 transition-all peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-500">
+                            <input id="ruc" v-model="oOrganization.idOrganizacion" :disabled="isReadOnly" required
+                                class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
+                                placeholder=" " />
+                            <label for="ruc" :class="[
+                                'absolute left-4 bg-white px-1 text-sm text-gray-500 pointer-events-none transition-all',
+                                oOrganization.idOrganizacion ? '-top-3 text-xs text-blue-500' : 'top-1'
+                            ]">
                                 R.U.C.
                             </label>
                         </div>
-                        <!-- Campo Razon Social -->
+                        <!-- Campo Razón Social -->
                         <div class="relative">
-                            <input id="txtTitle" v-model="oOrganization.razonSocial" :disabled="isReadOnly" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent peer" />
-                            <label for="txtTitle"
-                                class="absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-500 transition-all peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-500">
-                                Razon Social
+                            <input id="razonSocial" v-model="oOrganization.razonSocial" :disabled="isReadOnly" required
+                                class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
+                                placeholder=" " />
+                            <label for="razonSocial" :class="[
+                                'absolute left-4 bg-white px-1 text-sm text-gray-500 pointer-events-none transition-all',
+                                oOrganization.razonSocial ? '-top-3 text-xs text-blue-500' : 'top-1'
+                            ]">
+                                Razón Social
                             </label>
                         </div>
-
-                        <!-- Espacio -->
-                        <div class="relative"></div>
-
-                        <!-- Campo Telefono -->
+                        <!-- Campo Teléfono -->
                         <div class="relative">
-                            <input id="txtTitle" v-model="oOrganization.telefono" :disabled="isReadOnly" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent peer" />
-                            <label for="txtTitle"
-                                class="absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-500 transition-all peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-500">
-                                Telefono
+                            <input id="telefono" v-model="oOrganization.telefono" :disabled="isReadOnly" required
+                                class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
+                                placeholder=" " />
+                            <label for="telefono" :class="[
+                                'absolute left-4 bg-white px-1 text-sm text-gray-500 pointer-events-none transition-all',
+                                oOrganization.telefono ? '-top-3 text-xs text-blue-500' : 'top-1'
+                            ]">
+                                Teléfono
                             </label>
                         </div>
-
                         <!-- Campo Distrito -->
                         <div class="relative">
-                            <select id="txtDistrito" v-model="oOrganization.idDistrito" :disabled="isReadOnly" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent peer">
+                            <select id="distrito" v-model="oOrganization.idDistrito" :disabled="isReadOnly" required
+                                class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50">
                                 <option value="" disabled>Selecciona un distrito</option>
-                                <option v-for="distrito in oListDistrict" :key="distrito.idDistrito" :value="distrito.idDistrito">
+                                <option v-for="distrito in oListDistrict" :key="distrito.idDistrito"
+                                    :value="distrito.idDistrito">
                                     {{ distrito.nombreDistrito }}
                                 </option>
                             </select>
-                            <label for="txtDistrito"
-                                class="absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-500 transition-all peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-500">
+                            <label for="distrito" :class="[
+                                'absolute left-4 bg-white px-1 text-sm text-gray-500 pointer-events-none transition-all',
+                                oOrganization.idDistrito ? '-top-3 text-xs text-blue-500' : 'top-1'
+                            ]">
                                 Distrito
                             </label>
                         </div>
-
-                        <div class="relative"></div>
-
                         <!-- Campo Dirección -->
                         <div class="relative md:col-span-2">
-                            <textarea id="txtDirection" rows="2" v-model="oOrganization.direccion"
-                                :disabled="isReadOnly" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent peer"></textarea>
-                            <label for="txtDirection"
-                                class="absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-500 transition-all peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-500">
+                            <textarea id="direccion" rows="2" v-model="oOrganization.direccion" :disabled="isReadOnly"
+                                required
+                                class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 resize-none"
+                                placeholder=" "></textarea>
+                            <label for="direccion" :class="[
+                                'absolute left-4 bg-white px-1 text-sm text-gray-500 pointer-events-none transition-all',
+                                oOrganization.direccion ? '-top-3 text-xs text-blue-500' : 'top-1'
+                            ]">
                                 Dirección
                             </label>
                         </div>
-
-
                     </div>
                 </div>
 
-                <div class="border-t border-gray-200 my-6"></div>
+                <div class="border-t border-gray-200 my-8"></div>
 
                 <!-- Botones de Acción -->
-                <div class="flex justify-start space-x-3">
+                <div class="flex justify-end space-x-3">
                     <button v-if="!isReadOnly" type="submit"
-                        class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        class="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-semibold shadow transition">
                         <i class="pi pi-save mr-2"></i>
                         Guardar
                     </button>
                     <button v-if="!isReadOnly" @click="BackTo"
-                        class="flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                        class="flex items-center px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 font-semibold shadow transition">
                         <i class="pi pi-arrow-left mr-2"></i>
                         Atrás
                     </button>
@@ -126,7 +133,7 @@ const BackTo = () => {
 
 const LoadDistricts = async () => {
     const response = await DistrictService.GetDistrictService();
-    console.log("distritos: ",response.data);
+    console.log("distritos: ", response.data);
     if (response.status == 200) {
         oListDistrict.value = response.data;
     }
@@ -134,7 +141,7 @@ const LoadDistricts = async () => {
 
 const LoadProfile = async (idOrganizacion) => {
     const response = await ProfileOrganizationService.GetProfileOrganizationService(idOrganizacion);
-    console.log("load profile: ",response.data);
+    console.log("load profile: ", response.data);
     if (response.status == 200) {
         oOrganization.value = response.data[0];
         activeInputs(editProfile);
