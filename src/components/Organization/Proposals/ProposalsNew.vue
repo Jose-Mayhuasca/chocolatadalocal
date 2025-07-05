@@ -10,7 +10,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Campo Título -->
                     <div class="relative">
-                        <input id="txtTitle" v-model="oPropuestas.tituloPropuesta"
+                        <input id="txtTitle" v-model="oPropuestas.tituloPropuesta" maxlength="45"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent peer" />
                         <label for="txtTitle"
                             class="absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-500 transition-all peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-500">
@@ -101,11 +101,19 @@
                 </button>
             </div>
         </div>
+        <!-- Toast personalizado -->
+        <div v-if="toast.show" :class="[
+            'fixed top-6 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 transition-all duration-300',
+            toast.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+        ]">
+            <i :class="toast.type === 'success' ? 'pi pi-check-circle text-2xl' : 'pi pi-times-circle text-2xl'"></i>
+            <span class="font-semibold">{{ toast.message }}</span>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import ProposalsService from '../../../services/ProposalsService';
 
@@ -118,6 +126,17 @@ const oPropuestas = ref({
 });
 
 const fechaInicio = ref(null);
+
+const toast = ref({
+    show: false,
+    message: '',
+    type: 'error' // 'success' | 'error'
+});
+
+function showToast(message, type = 'error') {
+    toast.value = { show: true, message, type };
+    setTimeout(() => { toast.value.show = false }, 3000);
+}
 
 onMounted(() => {
     Initialize();
@@ -153,6 +172,21 @@ const LoadPropuestasDetalle = async (idVoluntariado) => {
     }
 }
 
+function validateFields() {
+    const p = oPropuestas.value;
+    if (
+        !p.tituloPropuesta ||
+        !p.descripcionPropuesta ||
+        !p.direccion ||
+        !p.fechaInicio ||
+        !p.fechaFinal ||
+        !p.descripcionRequisito
+    ) {
+        return false;
+    }
+    return true;
+}
+
 const SaveProposals = async () => {
     const idVoluntariado = oPropuestas.value.idVoluntariado;
 
@@ -164,6 +198,11 @@ const SaveProposals = async () => {
 };
 
 const UpdateProposals = async () => {
+    if (!validateFields()) {
+        showToast('Por favor, completa todos los campos obligatorios.', 'error');
+        return;
+    }
+
     const { ...model } = oPropuestas.value;
 
     const request = {
@@ -183,6 +222,11 @@ const UpdateProposals = async () => {
 }
 
 const CreateProposals = async () => {
+    if (!validateFields()) {
+        showToast('Por favor, completa todos los campos obligatorios.', 'error');
+        return;
+    }
+
     const idOrganizacion = localStorage.getItem('userId');
 
     if (!idOrganizacion) {

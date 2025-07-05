@@ -13,7 +13,8 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- Campo DNI -->
                         <div class="relative">
-                            <input id="dni" v-model="oVolunteer.idUsuario" :disabled="isReadOnly" required
+                            <input id="dni" v-model="oVolunteer.idUsuario" :disabled="isReadOnly" required maxlength="8"
+                                @input="validateDNI"
                                 class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
                                 placeholder=" " />
                             <label for="dni" :class="[
@@ -22,10 +23,12 @@
                             ]">
                                 D.N.I.
                             </label>
+                            <p v-if="errors.dni" class="text-sm text-red-600 mt-1">{{ errors.dni }}</p>
                         </div>
                         <!-- Campo Nombres -->
                         <div class="relative">
                             <input id="nombre" v-model="oVolunteer.nombre" :disabled="isReadOnly" required
+                                maxlength="25" @input="validateNombre"
                                 class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
                                 placeholder=" " />
                             <label for="nombre" :class="[
@@ -38,6 +41,7 @@
                         <!-- Campo Apellidos -->
                         <div class="relative">
                             <input id="apellido" v-model="oVolunteer.apellido" :disabled="isReadOnly" required
+                                maxlength="25" @input="validateApellido"
                                 class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
                                 placeholder=" " />
                             <label for="apellido" :class="[
@@ -50,6 +54,7 @@
                         <!-- Campo Teléfono -->
                         <div class="relative">
                             <input id="telefono" v-model="oVolunteer.telefono" :disabled="isReadOnly" required
+                                maxlength="9" @input="validateTelefono"
                                 class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
                                 placeholder=" " />
                             <label for="telefono" :class="[
@@ -58,6 +63,7 @@
                             ]">
                                 Teléfono
                             </label>
+                            <p v-if="errors.telefono" class="text-sm text-red-600 mt-1">{{ errors.telefono }}</p>
                         </div>
                         <!-- Campo Distrito -->
                         <div class="relative">
@@ -79,7 +85,7 @@
                         <!-- Campo Dirección -->
                         <div class="relative md:col-span-2">
                             <textarea id="direccion" rows="2" v-model="oVolunteer.direccion" :disabled="isReadOnly"
-                                required
+                                required maxlength="100"
                                 class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 resize-none"
                                 placeholder=" "></textarea>
                             <label for="direccion" :class="[
@@ -126,6 +132,35 @@ const oListDistrict = ref([]);
 
 const isReadOnly = ref(true);
 const editProfile = localStorage.getItem('editProfile');
+
+const errors = ref({
+    dni: '',
+    nombre: '',
+    apellido: '',
+    telefono: ''
+});
+
+function validateDNI() {
+    oVolunteer.value.idUsuario = oVolunteer.value.idUsuario.replace(/\D/g, '').slice(0, 8);
+    errors.value.dni = (oVolunteer.value.idUsuario.length > 0 && oVolunteer.value.idUsuario.length < 8)
+        ? 'Debe tener 8 dígitos'
+        : '';
+}
+
+function validateNombre() {
+    oVolunteer.value.nombre = oVolunteer.value.nombre.replace(/[^A-Za-zÀ-ÿ\u00f1\u00d1\s]/g, '');
+}
+
+function validateApellido() {
+    oVolunteer.value.apellido = oVolunteer.value.apellido.replace(/[^A-Za-zÀ-ÿ\u00f1\u00d1\s]/g, '');
+}
+
+function validateTelefono() {
+    oVolunteer.value.telefono = oVolunteer.value.telefono.replace(/\D/g, '').slice(0, 9);
+    errors.value.telefono = (oVolunteer.value.telefono.length > 0 && oVolunteer.value.telefono.length < 9)
+        ? 'Debe tener 9 dígitos'
+        : '';
+}
 
 onMounted(() => {
     Initialize();

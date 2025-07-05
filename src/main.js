@@ -1,9 +1,10 @@
+import 'primeicons/primeicons.css';
+
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
 import PrimeVue from 'primevue/config';
 import Componentes from './primevue';
-import 'primeicons/primeicons.css';
 import router from './router'
 
 // createApp(App).mount('#app')

@@ -14,6 +14,7 @@
                         <!-- Campo RUC -->
                         <div class="relative">
                             <input id="ruc" v-model="oOrganization.idOrganizacion" :disabled="isReadOnly" required
+                                maxlength="11" @input="validateRUC"
                                 class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
                                 placeholder=" " />
                             <label for="ruc" :class="[
@@ -22,10 +23,12 @@
                             ]">
                                 R.U.C.
                             </label>
+                            <p v-if="errors.ruc" class="text-sm text-red-600 mt-1">{{ errors.ruc }}</p>
                         </div>
                         <!-- Campo Razón Social -->
                         <div class="relative">
                             <input id="razonSocial" v-model="oOrganization.razonSocial" :disabled="isReadOnly" required
+                                maxlength="50" @input="validateRazonSocial"
                                 class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
                                 placeholder=" " />
                             <label for="razonSocial" :class="[
@@ -38,6 +41,7 @@
                         <!-- Campo Teléfono -->
                         <div class="relative">
                             <input id="telefono" v-model="oOrganization.telefono" :disabled="isReadOnly" required
+                                maxlength="9" @input="validateTelefono"
                                 class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
                                 placeholder=" " />
                             <label for="telefono" :class="[
@@ -46,6 +50,7 @@
                             ]">
                                 Teléfono
                             </label>
+                            <p v-if="errors.telefono" class="text-sm text-red-600 mt-1">{{ errors.telefono }}</p>
                         </div>
                         <!-- Campo Distrito -->
                         <div class="relative">
@@ -67,7 +72,7 @@
                         <!-- Campo Dirección -->
                         <div class="relative md:col-span-2">
                             <textarea id="direccion" rows="2" v-model="oOrganization.direccion" :disabled="isReadOnly"
-                                required
+                                required maxlength="100"
                                 class="peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 resize-none"
                                 placeholder=" "></textarea>
                             <label for="direccion" :class="[
@@ -114,6 +119,30 @@ const oListDistrict = ref([]);
 
 const isReadOnly = ref(true);
 const editProfile = localStorage.getItem('editProfile');
+
+const errors = ref({
+    ruc: '',
+    razonSocial: '',
+    telefono: ''
+});
+
+function validateRUC() {
+    oOrganization.value.idOrganizacion = (oOrganization.value.idOrganizacion || '').replace(/\D/g, '').slice(0, 11);
+    errors.value.ruc = (oOrganization.value.idOrganizacion && oOrganization.value.idOrganizacion.length < 11)
+        ? 'Debe tener 11 dígitos'
+        : '';
+}
+
+function validateRazonSocial() {
+    oOrganization.value.razonSocial = (oOrganization.value.razonSocial || '').replace(/[^A-Za-zÀ-ÿ\u00f1\u00d1\s]/g, '');
+}
+
+function validateTelefono() {
+    oOrganization.value.telefono = (oOrganization.value.telefono || '').replace(/\D/g, '').slice(0, 9);
+    errors.value.telefono = (oOrganization.value.telefono && oOrganization.value.telefono.length < 9)
+        ? 'Debe tener 9 dígitos'
+        : '';
+}
 
 onMounted(() => {
     Initialize();

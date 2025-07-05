@@ -1,7 +1,6 @@
 <template>
   <div
-    class="sidebar w-64 flex flex-col transition-all duration-300 bg-gradient-to-b from-blue-900 to-blue-800 shadow-xl"
-  >
+    class="sidebar w-64 flex flex-col transition-all duration-300 bg-gradient-to-b from-blue-900 to-blue-800 shadow-xl">
     <!-- Logo/Header -->
     <div class="p-6 mb-2 flex justify-center items-center">
       <Causa class="text-white" width="120" />
@@ -10,11 +9,9 @@
     <!-- Menú Principal -->
     <div class="flex flex-col px-2 py-2 space-y-1">
       <template v-for="(item, index) in mainMenuItems" :key="index">
-        <router-link
-          :to="item.to"
+        <router-link :to="item.to"
           class="flex items-center gap-3 text-white px-4 py-3 rounded hover:bg-white/30 transition-colors duration-200"
-          active-class="bg-cyan-700/50"
-        >
+          active-class="bg-cyan-700/50">
           <i :class="item.icon + ' text-lg'"></i>
           <span>{{ item.label }}</span>
         </router-link>
@@ -27,11 +24,9 @@
     <!-- Menú Secundario (Perfil y Configuración) -->
     <div class="flex flex-col px-2 py-2 space-y-1 border-t border-blue-700/50">
       <template v-for="(item, index) in secondaryMenuItems" :key="index">
-        <router-link
-          :to="item.to"
+        <router-link :to="item.to"
           class="flex items-center gap-3 text-white px-4 py-3 rounded hover:bg-white/30 transition-colors duration-200"
-          active-class="bg-blue-700/50"
-        >
+          active-class="bg-blue-700/50">
           <i :class="item.icon + ' text-lg'"></i>
           <span>{{ item.label }}</span>
         </router-link>
@@ -41,13 +36,13 @@
     <!-- Perfil -->
     <div class="p-4">
       <div class="flex items-center gap-3">
-        <div
-          class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold"
-        >
+        <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
           {{ getUserInitials() }}
         </div>
         <div>
-          <p class="text-sm font-medium text-white">Organización</p>
+          <p class="text-sm font-medium text-white">
+            {{ userType === 'Voluntario' ? 'Voluntario' : 'Organización' }}
+          </p>
           <p class="text-xs text-blue-200">Administrador</p>
         </div>
       </div>
@@ -65,6 +60,7 @@ const mainMenuItems = ref([]);
 const secondaryMenuItems = ref([]);
 const router = useRouter();
 const idUser = localStorage.getItem("userId");
+const userType = ref('');
 
 onMounted(() => {
   loadMenu();
@@ -81,6 +77,7 @@ async function loadMenu() {
 
     const user = validationUser(idUser);
     console.log("Tipo de usuario:", user);
+    userType.value = user;
 
     let response = null;
 

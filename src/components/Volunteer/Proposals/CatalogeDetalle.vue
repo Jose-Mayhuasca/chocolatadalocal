@@ -126,6 +126,15 @@
                     </div>
                 </div>
             </div>
+            <!-- Toast personalizado -->
+            <div v-if="toast.show" :class="[
+                'fixed top-6 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 transition-all duration-300',
+                toast.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            ]">
+                <i
+                    :class="toast.type === 'success' ? 'pi pi-check-circle text-2xl' : 'pi pi-times-circle text-2xl'"></i>
+                <span class="font-semibold">{{ toast.message }}</span>
+            </div>
         </div>
 
         <!-- Footer (igual que en la página principal) -->
@@ -138,12 +147,25 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import CatalogeService from '../../../services/CatalogeService';
+import RegistrationService from '../../../services/RegistrationService';
 
 const route = useRoute();
 const router = useRouter();
 const oPropuesta = ref(null);
+const oListRegistrations = ref([]);
+
 const idUsuario = localStorage.getItem('userId');
 
+const toast = ref({
+    show: false,
+    message: '',
+    type: 'success' // 'success' | 'error'
+});
+
+function showToast(message, type = 'success') {
+    toast.value = { show: true, message, type };
+    setTimeout(() => { toast.value.show = false }, 3000);
+}
 
 onMounted(() => {
     Initialize();
@@ -156,8 +178,19 @@ const Initialize = () => {
         console.log("No se encontro la propuesta.");
         return;
     }
-
     LoadPropuestasDetalle(idVoluntariado);
+    LoadRegistrations(idUsuario);
+};
+
+const LoadRegistrations = async (idUsuario) => {
+    try {
+        const response = await RegistrationService.GetRegistrationsService(idUsuario);
+        if (response.status === 200) {
+            oListRegistrations.value = response.data.map(item => item.idVoluntariado);
+        }
+    } catch (error) {
+        console.error("Error al cargar las inscripciones:", error);
+    }
 };
 
 const LoadPropuestasDetalle = async (idVoluntariado) => {
@@ -176,7 +209,12 @@ const formatDateRange = (start, end) => {
 
 async function InscribeVolunteer(idVoluntariado) {
     if (!idUsuario || !idVoluntariado) {
-        console.error('Faltan datos para la inscripción.');
+        showToast('Faltan datos para la inscripción.', 'error');
+        return;
+    }
+
+    if (oListRegistrations.value.includes(idVoluntariado)) {
+        showToast('Ya estás inscrito en esta propuesta.', 'warning');
         return;
     }
 
@@ -189,13 +227,13 @@ async function InscribeVolunteer(idVoluntariado) {
         const response = await CatalogeService.CreateInscriptionVolunteerService(request);
         console.log('response inscribe:', response);
         if (response.status === 200) {
-            console.log('Inscripción exitosa:', response.data);
+            showToast('¡Inscripción exitosa!', 'success');
             router.push('/portal/Voluntario/Propuestas');
         } else {
-            console.error('Error al inscribirse en el voluntariado:', response);
+            showToast('Error al inscribirse en la propuesta.', 'error');
         }
     } catch (error) {
-        console.error('Excepción al inscribirse:', error);
+        showToast('Excepción al inscribirse.', 'error');
     }
 }
 

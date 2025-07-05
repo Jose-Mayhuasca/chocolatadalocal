@@ -28,7 +28,7 @@
                 <div class="bg-white shadow-md p-6 rounded-xl border-l-8 border-violet-500 flex flex-col">
                     <div class="flex items-center gap-2 mb-3">
                         <i class="pi pi-chart-line text-violet-500 text-2xl"></i>
-                        <h2 class="text-lg font-semibold text-gray-700">Evolución de Propuestas</h2>
+                        <h2 class="text-lg font-semibold text-gray-700">Evolución de Inscripciones</h2>
                     </div>
                     <Chart type="line" :data="chartEvolucionData" :options="chartOptions" style="min-height:260px" />
                 </div>
@@ -67,6 +67,13 @@ const LoadRegistrations = async () => {
     }
 };
 
+// Función para formatear fechas
+const formatDate = (dateString) => {
+    if (!dateString) return "Fecha no disponible";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" });
+};
+
 // Gráfico de comparación de propuestas activas e inactivas
 const setChartEstadoInscripcionData = () => {
     const pendientes = oListRegistrations.value.filter(reg => reg.estadoInscripcion === "Pendiente").length;
@@ -86,10 +93,9 @@ const setChartEstadoInscripcionData = () => {
     };
 };
 
-
 // Gráfico de evolución de propuestas (ejemplo con fechas)
 const setChartEvolucionData = () => {
-    const fechas = oListRegistrations.value.map(propuesta => formatDate(propuesta.fechaInicio));
+    const fechas = oListRegistrations.value.map(propuesta => formatDate(propuesta.fechaInscripcion));
     const cantidades = oListRegistrations.value.map((_, index) => index + 1);
 
     return {
@@ -143,10 +149,4 @@ const setChartOptions = () => {
     };
 };
 
-// Función para formatear fechas
-const formatDate = (dateString) => {
-    if (!dateString) return "Fecha no disponible";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("es-ES", { day: "2-digit", month: "2-digit", year: "numeric" });
-};
 </script>

@@ -80,6 +80,15 @@
           </div>
         </div>
       </div>
+
+      <!-- Toast personalizado -->
+      <div v-if="toast.show" :class="[
+        'fixed top-6 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 transition-all duration-300',
+        toast.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+      ]">
+        <i :class="toast.type === 'success' ? 'pi pi-check-circle text-2xl' : 'pi pi-times-circle text-2xl'"></i>
+        <span class="font-semibold">{{ toast.message }}</span>
+      </div>
     </div>
 
     <!-- Paginación -->
@@ -123,6 +132,16 @@ const filteredCatalogo = computed(() =>
   )
 );
 
+const toast = ref({
+  show: false,
+  message: '',
+  type: 'success' // 'success' | 'error'
+});
+
+function showToast(message, type = 'success') {
+  toast.value = { show: true, message, type };
+  setTimeout(() => { toast.value.show = false }, 3000);
+}
 
 //#region Eventos
 onMounted(() => {
@@ -168,7 +187,7 @@ const formatDateRange = (start, end) => {
 
 async function InscribeVolunteer(idVoluntariado) {
   if (!idUsuario || !idVoluntariado) {
-    console.error('Faltan datos para la inscripción.');
+    showToast('Faltan datos para la inscripción.', 'error');
     return;
   }
 
@@ -181,13 +200,14 @@ async function InscribeVolunteer(idVoluntariado) {
     const response = await CatalogeService.CreateInscriptionVolunteerService(request);
     console.log('response inscribe:', response);
     if (response.status === 200) {
-      console.log('Inscripción exitosa:', response.data);
+      showToast('¡Inscripción exitosa!', 'success');
       await LoadRegistrations(idUsuario);
       await LoadPropuestas();
     } else {
-      console.error('Error al inscribirse en el voluntariado:', response);
+      showToast('Error al inscribirse en la propuesta.', 'error');
     }
   } catch (error) {
+    showToast('Excepción al inscribirse.', 'error');
     console.error('Excepción al inscribirse:', error);
   }
 }
