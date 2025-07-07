@@ -32,6 +32,10 @@
         ¿No tienes una cuenta?
         <router-link to="/register" class="text-blue-600 hover:underline font-semibold">Crear Cuenta</router-link>
       </p>
+      <p class="mt-4 text-sm text-center text-gray-600">
+        <a class="text-blue-600 hover:underline font-semibold cursor-pointer" @click="openWhatsApp">Olvidé mi
+          contraseña</a>
+      </p>
 
       <!-- Toast personalizado -->
       <div v-if="toast.show" :class="[
@@ -80,6 +84,15 @@ const toast = ref({
 function showToast(message: string, type: 'success' | 'error' = 'success') {
   toast.value = { show: true, message, type };
   setTimeout(() => { toast.value.show = false }, 3000);
+}
+
+//redireccionamiento a soporte
+const wspNumber = ref('51951703662');
+const wspMessage = ref('Hola, necesito ayuda para recuperar mi contraseña en CausaViva.');
+
+function openWhatsApp() {
+  const url = `https://wa.me/${wspNumber.value}?text=${encodeURIComponent(wspMessage.value)}`;
+  window.open(url, '_blank');
 }
 
 function handleSubmit() {
