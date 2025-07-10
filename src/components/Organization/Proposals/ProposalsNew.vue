@@ -44,7 +44,7 @@
 
                     <!-- Campo Fecha Inicio -->
                     <div class="relative">
-                        <input id="txtInitDate" v-model="oPropuestas.fechaInicio" type="date"
+                        <input id="txtInitDate" v-model="oPropuestas.fechaInicio" type="date" :min="today"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent peer" />
                         <label for="txtInitDate"
                             class="absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-500 transition-all peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-500">
@@ -54,7 +54,7 @@
 
                     <!-- Campo Fecha Final -->
                     <div class="relative">
-                        <input id="txtFinalDate" v-model="oPropuestas.fechaFinal" type="date"
+                        <input id="txtFinalDate" v-model="oPropuestas.fechaFinal" type="date" :min="today"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent peer" />
                         <label for="txtFinalDate"
                             class="absolute left-3 -top-2.5 bg-white px-1 text-sm text-gray-500 transition-all peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-500">
@@ -133,6 +133,13 @@ const toast = ref({
     type: 'error' // 'success' | 'error'
 });
 
+const today = computed(() => {
+    const d = new Date();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${d.getFullYear()}-${month}-${day}`;
+});
+
 function showToast(message, type = 'error') {
     toast.value = { show: true, message, type };
     setTimeout(() => { toast.value.show = false }, 3000);
@@ -182,14 +189,36 @@ function validateFields() {
         !p.fechaFinal ||
         !p.descripcionRequisito
     ) {
+        showToast('Por favor, completa todos los campos, son obligatorios.', 'error');
         return false;
     }
+
+    // Validar que las fechas no sean anteriores a hoy
+    const todayDate = new Date(today.value);
+    const fechaInicioDate = new Date(p.fechaInicio);
+    const fechaFinalDate = new Date(p.fechaFinal);
+
+    if (fechaInicioDate < todayDate) {
+        showToast('La fecha de inicio no puede ser anterior a hoy.', 'error');
+        return false;
+    }
+    if (fechaFinalDate < todayDate) {
+        showToast('La fecha final no puede ser anterior a hoy.', 'error');
+        return false;
+    }
+    if (fechaFinalDate < fechaInicioDate) {
+        showToast('La fecha final no puede ser anterior a la fecha de inicio.', 'error');
+        return false;
+    }
+
     return true;
 }
 
 const SaveProposals = async () => {
+    if (!validateFields()) {
+        return;
+    }
     const idVoluntariado = oPropuestas.value.idVoluntariado;
-
     if (!idVoluntariado || idVoluntariado === 0) {
         await CreateProposals();
     } else {
@@ -198,10 +227,10 @@ const SaveProposals = async () => {
 };
 
 const UpdateProposals = async () => {
-    if (!validateFields()) {
-        showToast('Por favor, completa todos los campos obligatorios.', 'error');
-        return;
-    }
+    // if (!validateFields()) {
+    //     showToast('Por favor, complete de forma correcta los campos.', 'error');
+    //     return;
+    // }
 
     const { ...model } = oPropuestas.value;
 
@@ -222,10 +251,10 @@ const UpdateProposals = async () => {
 }
 
 const CreateProposals = async () => {
-    if (!validateFields()) {
-        showToast('Por favor, completa todos los campos obligatorios.', 'error');
-        return;
-    }
+    // if (!validateFields()) {
+    //     showToast('Por favor, completa todos los campos obligatorios.', 'error');
+    //     return;
+    // }
 
     const idOrganizacion = localStorage.getItem('userId');
 
